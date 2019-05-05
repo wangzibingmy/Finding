@@ -2,55 +2,73 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var logger = require('morgan');
 var bodyParser = require('body-parser');
+var consolidate = require('consolidate');
+var expressRoute = require('express-route');
+var logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var registerRouter = require('./routes/register');
-var listRouter = require('./routes/list');
-var testRouter = require('./routes/test');
-var loginRouter = require('./routes/login');
-var lostthingRouter = require('./routes/lostthing');
-var loststhaddRouter = require('./routes/loststhadd');
-var mypostRouter = require('./routes/mypost');
-var peopsearRouter = require('./routes/peopsear');
-var peopsearaddRouter = require('./routes/peopsearadd');
-var mypeopRouter = require('./routes/mypeop');
-var animalRouter = require('./routes/animal');
-var animaladdRouter = require('./routes/animaladd');
-var myanimalRouter = require('./routes/myanimal');
-var usermsgRouter = require('./routes/usermsg');
-var msgchangeRouter = require('./routes/msgchange');
-var zhaolingRouter = require('./routes/zhaoling');
-var zhaolingaddRouter = require('./routes/zhaolingadd');
-var myzhaolingRouter = require('./routes/myzhaoling');
-var repwdRouter = require('./routes/repwd');
-var upfoundRouter = require('./routes/upfound');
-var imgaddRouter = require('./routes/imgadd');
-var imgaddanimalRouter = require('./routes/imgaddanimal');
-var imgaddsthRouter = require('./routes/imgaddsth');
-var imgaddzhaolingRouter = require('./routes/imgaddzhaoling');
+var multer = require('multer');
+var multerObj = multer({dest:'./public/upload'});
+
+var indexRouter = require('./routes/user/index');
+var usersRouter = require('./routes/user/users');
+var registerRouter = require('./routes/user/register');
+var listRouter = require('./routes/user/list');
+var testRouter = require('./routes/user/test');
+var loginRouter = require('./routes/user/login');
+var lostthingRouter = require('./routes/user/lostthing');
+var loststhaddRouter = require('./routes/user/loststhadd');
+var mypostRouter = require('./routes/user/mypost');
+var peopsearRouter = require('./routes/user/peopsear');
+var peopsearaddRouter = require('./routes/user/peopsearadd');
+var mypeopRouter = require('./routes/user/mypeop');
+var animalRouter = require('./routes/user/animal');
+var animaladdRouter = require('./routes/user/animaladd');
+var myanimalRouter = require('./routes/user/myanimal');
+var usermsgRouter = require('./routes/user/usermsg');
+var msgchangeRouter = require('./routes/user/msgchange');
+var zhaolingRouter = require('./routes/user/zhaoling');
+var zhaolingaddRouter = require('./routes/user/zhaolingadd');
+var myzhaolingRouter = require('./routes/user/myzhaoling');
+var repwdRouter = require('./routes/user/repwd');
+var upfoundRouter = require('./routes/user/upfound');
+var imgaddRouter = require('./routes/user/imgadd');
+var imgaddanimalRouter = require('./routes/user/imgaddanimal');
+var imgaddsthRouter = require('./routes/user/imgaddsth');
+var imgaddzhaolingRouter = require('./routes/user/imgaddzhaoling');
 
 var app = express();
-// app.all('*', function(req, res, next) {
-//   res.header('Acess-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type,Content-Length, Authorization, Accept,X-Requested-With');
-//   res.header('Access-Control-Allow-Methods”,“PUT,POST,GET,DELETE,OPTIONS');
-//   res.header('X-Powered-By','3.2.1')
-//   if(req.method=='OPTIONS') 
-//   res.send(200);
-//   else  next();
-// });
-// view engine setup
+
+//1.获取请求数据
+app.use(bodyParser.urlencoded());
+app.use(multerObj.any());
+//2.cookie/session
+app.use(cookieParser());
+(function(){
+    var keys=[];
+    for(var i=0;i<10000;i++){
+        keys[i]='a_'+Math.random();
+    }
+    app.use(cookieSession({
+        name: 'sess_id',
+        keys:keys,
+        maxAge:50*60*1000 //2min
+    }));
+})();
+
+app.engine('html',consolidate.ejs);
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+///////////////////////////
+app.use('/admin/',require('./routes/admin/index.js')());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
