@@ -11,7 +11,7 @@ router.post('/',function(req,res){
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     var username=req.body.username;
-    var zhaolingpic = req.body.zhaolingpic;
+    // var zhaolingpic = req.body.zhaolingpic;
     var pubtime = req.body.pubtime;
     var found = req.body.found;
     var zhaolingcont = req.body.zhaolingcont;
@@ -23,7 +23,7 @@ router.post('/',function(req,res){
     var lianxi = req.body.lianxi;
 
     console.log('username:'+username);
-    console.log('zhaolingpic:'+zhaolingpic);
+    // console.log('zhaolingpic:'+zhaolingpic);
     console.log('found:'+found);
     console.log('pubtime:'+pubtime);
     console.log('zhaolingcont:'+zhaolingcont);
@@ -36,7 +36,7 @@ router.post('/',function(req,res){
 
     var newlost = new zhaolingR({
         username:username,
-        zhaolingpic:zhaolingpic,
+        // zhaolingpic:zhaolingpic,
         pubtime:pubtime,
         found:found,
         zhaolingcont:zhaolingcont,
@@ -47,20 +47,17 @@ router.post('/',function(req,res){
         lostcity:lostcity,
         lianxi:lianxi
     });
-    if(newlost.zhaolingpic!=='undefined' && newlost.found!=='undefined' && newlost.pubtime!=='undefined' && newlost.zhaolingcont!=='undefined' && newlost.zhaolingplace!=='undefined' && newlost.zhaolingtime!=='undefined' && newlost.title!=='undefined' && newlost.classify!=='undefined' && newlost.lostcity!=='undefined' && newlost.lianxi!=='undefined'){
-        newlost.save({username:newlost.username,zhaolingpic:newlost.zhaolingpic,pubtime:newlost.pubtime,found:newlost.found,zhaolingcont:newlost.zhaolingcont,zhaolingplace:newlost.zhaolingplace,zhaolingtime:newlost.zhaolingtime,title:newlost.title,classify:newlost.classify,lostcity:newlost.lostcity,lianxi:newlost.lianxi},function(err,results){          
-            if(err){
-              res.locals.error = err;
-              return;
-            }
+    // if(newlost.zhaolingpic!=='undefined' && newlost.found!=='undefined' && newlost.pubtime!=='undefined' && newlost.zhaolingcont!=='undefined' && newlost.zhaolingplace!=='undefined' && newlost.zhaolingtime!=='undefined' && newlost.title!=='undefined' && newlost.classify!=='undefined' && newlost.lostcity!=='undefined' && newlost.lianxi!=='undefined'){
+        newlost.save(newlost.title,newlost,function(err,results){          
+            res.send(results);
         });
          //返回响应数据
-         res.send('1');
-         console.log('发布成功');
-    }
-    else{
-        res.send('2');
-    }
+    //      res.send('1');
+    //      console.log('发布成功');
+    // }
+    // else{
+    //     res.send('2');
+    // }
     // newPublish.deleteData(newPublish.date,function(err,results){
     //     if(err){
     //       return;

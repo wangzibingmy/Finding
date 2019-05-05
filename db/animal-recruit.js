@@ -24,16 +24,16 @@ module.exports =animalR;
 
 pool.getConnection(function(err, connection) {
     //保存数据
-    animalR.prototype.save = function save(admin,callback) {
-        pool.getConnection(function (err, connection) {
-            var insertanimalsearch_Sql = "INSERT INTO animal_search(username,animalpic,pubtime,found,animalcont,animalplace,animaltime,title,lostcity,lianxi,classify) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-            connection.query(insertanimalsearch_Sql, [admin.username,admin.animalpic,admin.pubtime,admin.found,admin.animalcont,admin.animalplace,admin.animaltime,admin.title,admin.lostcity,admin.lianxi,admin.classify], function (err, result) {
-                connection.release();
-                if (err) {
-                    console.log("insertanimalsearch_Sql Error: " + err.message);
+    animalR.prototype.save = function save(title,data,callback){
+        pool.getConnection(function(err,connection){
+            var saveAnimalSql = "UPDATE animal_search SET username =?,pubtime =?,found =?,animalcont =?,animalplace =?,animaltime =?,lostcity =?,lianxi =?,classify=? WHERE title =?";
+            connection.query(saveAnimalSql,[data.username,data.pubtime,data.found,data.animalcont,data.animalplace,data.animaltime,data.lostcity,data.lianxi,data.classify,title],function(err,result){
+                if(err){
+                    console.log('[UPDATE ERROR]-',err.message);
                     return;
                 }
-                callback(err, result);
+                console.log('UPDATE affectedRows',result.affectedRows);
+                callback(err,result);
             });
         });
     };

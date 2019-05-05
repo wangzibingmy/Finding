@@ -9,30 +9,30 @@ pool.on('connection', function(connection) {
 
 function lostpeopR(admin){
     this.username = admin.username;
-    this.peoplepic = admin.peoplepic;
-    this.pubtime = admin.pubtime;
-    this.found = admin.found;
+    // this.peoplepic = admin.peoplepic;
+    this.peoppubtime = admin.peoppubtime;
+    this.peopfound = admin.peopfound;
     this.peopcont = admin.peopcont;
     this.peoplesearplace =admin.peoplesearplace; 
-    this.losttime = admin.losttime;
-    this.title = admin.title;
-    this.lostcity = admin.lostcity;
-    this.lianxi = admin.lianxi;
+    this.peoplosttime = admin.peoplosttime;
+    this.peoptitle = admin.peoptitle;
+    this.peoplostcity = admin.peoplostcity;
+    this.peoplianxi = admin.peoplianxi;
 };
 module.exports =lostpeopR;
 
 pool.getConnection(function(err, connection) {
     //保存数据
-    lostpeopR.prototype.save = function save(admin,callback) {
-        pool.getConnection(function (err, connection) {
-            var insertpeoplesearch_Sql = "INSERT INTO people_search(username,peoplepic,pubtime,found,peopcont,peoplesearplace,losttime,title,lostcity,lianxi) VALUES(?,?,?,?,?,?,?,?,?,?)";
-            connection.query(insertpeoplesearch_Sql, [admin.username,admin.peoplepic,admin.pubtime,admin.found,admin.peopcont,admin.peoplesearplace,admin.losttime,admin.title,admin.lostcity,admin.lianxi], function (err, result) {
-                connection.release();
-                if (err) {
-                    console.log("insertpeoplesearch_Sql Error: " + err.message);
+    lostpeopR.prototype.updatepeo = function updatepeo(peoptitle,data,callback){
+        pool.getConnection(function(err,connection){
+            var savePeopSql = "UPDATE people_search SET username =?,peoppubtime =?,peopfound =?,peopcont =?,peoplesearplace =?,peoplosttime =?,peoplostcity =?,peoplianxi =? WHERE peoptitle =?";
+            connection.query(savePeopSql,[data.username,data.peoppubtime,data.peopfound,data.peopcont,data.peoplesearplace,data.peoplosttime,data.peoplostcity,data.peoplianxi,peoptitle],function(err,result){
+                if(err){
+                    console.log('[UPDATE ERROR]-',err.message);
                     return;
                 }
-                callback(err, result);
+                console.log('UPDATE affectedRows',result.affectedRows);
+                callback(err,result);
             });
         });
     };
@@ -68,10 +68,10 @@ pool.getConnection(function(err, connection) {
     };
 
     //删除数据
-    lostpeopR.prototype.deleteData = function deleteData(title,callback){
+    lostpeopR.prototype.deleteData = function deleteData(peoptitle,callback){
         pool.getConnection(function(err,connection){
-            var deletepeop_Sql = "DELETE FROM people_search WHERE title = ?";
-            connection.query(deletepeop_Sql, [title] , function (err, result) {              
+            var deletepeop_Sql = "DELETE FROM people_search WHERE peoptitle = ?";
+            connection.query(deletepeop_Sql, [peoptitle] , function (err, result) {              
                 if(err){
                     console.log('[DELETE ERROR] - ',err.message);
                     return;
@@ -86,21 +86,21 @@ pool.getConnection(function(err, connection) {
     }
 
     //修改数据
-    lostpeopR.prototype.updateData = function updateData(username,data,callback){
-        pool.getConnection(function(err,connection){
+    // lostpeopR.prototype.uppeopDate = function uppeopDate(username,data,callback){
+    //     pool.getConnection(function(err,connection){
             
-            var updatePeop_Sql = "UPDATE _recruit SET found = ?,peoplepic = ?,peopcont =?,peoplesearplace =?,losttime =?,title =?,lostcity =?,lianxi =? where username =?";
+    //         var updatePeop_Sql = "UPDATE _recruit SET peopfound = ?,peoplepic = ?,peopcont =?,peoplesearplace =?,peoplosttime =?,peoptitle =?,peopcity =?,peoplianxi =? where username =?";
 
-            connection.query(updatePeop_Sql,[data.found,data.peoplepic,data.peopcont,data.peoplesearplace,data.losttime,data.title,data.lianxi,username],function (err, result) {            
-                if(err){
-                      console.log('[UPDATE ERROR] - ',err.message);  
-                      return;
-                }            
-               console.log('UPDATE affectedRows',result.affectedRows);
-               callback(err,result);
-            })
-        })
-    }
+    //         connection.query(updatePeop_Sql,[data.peopfound,data.peoplepic,data.peopcont,data.peoplesearplace,data.peoplosttime,data.peoptitle,data.peoplianxi,username],function (err, result) {            
+    //             if(err){
+    //                   console.log('[UPDATE ERROR] - ',err.message);  
+    //                   return;
+    //             }            
+    //            console.log('UPDATE affectedRows',result.affectedRows);
+    //            callback(err,result);
+    //         })
+    //     })
+    // }
 
    
     // AdminR.getPeople = function(sort,callback){

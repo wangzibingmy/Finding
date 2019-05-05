@@ -29,14 +29,14 @@ router.get('/del', function(req, res, next){
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.header('Access-Control-Allow-Headers', 'content-type');
 
-    var title=req.query.title;
-    console.log('title'+title);
+    var peoptitle=req.query.peoptitle;
+    console.log('peoptitle'+peoptitle);
 
     var newLost = new LostR({
-        title: title
+        peoptitle: peoptitle
     });
     
-    newLost.deleteData(newLost.title,function(err,results){
+    newLost.deleteData(newLost.peoptitle,function(err,results){
         if(err){
             return;
         }

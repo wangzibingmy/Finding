@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var dbConfig = require('../db/db');
-var lostR = require('../db/animal-recruit');
+var animalR = require('../db/animal-recruit');
 
 router.post('/',function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
@@ -11,7 +11,7 @@ router.post('/',function(req,res){
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     var username=req.body.username;
-    var animalpic = req.body.animalpic;
+    // var animalpic = req.body.animalpic;
     var pubtime = req.body.pubtime;
     var found = req.body.found;
     var animalcont = req.body.animalcont;
@@ -23,7 +23,7 @@ router.post('/',function(req,res){
     var lianxi = req.body.lianxi;
 
     console.log('username:'+username);
-    console.log('animalpic:'+animalpic);
+    // console.log('animalpic:'+animalpic);
     console.log('found:'+found);
     console.log('pubtime:'+pubtime);
     console.log('animalcont:'+animalcont);
@@ -34,9 +34,9 @@ router.post('/',function(req,res){
     console.log('lianxi:'+lianxi);
     console.log('classify:'+classify);
 
-    var newanimal = new lostR({
+    var newanimal = new animalR({
         username:username,
-        animalpic:animalpic,
+        // animalpic:animalpic,
         pubtime:pubtime,
         found:found,
         animalcont:animalcont,
@@ -47,20 +47,17 @@ router.post('/',function(req,res){
         lianxi:lianxi,
         classify:classify
     });
-    if(newanimal.animalpic!=='undefined' && newanimal.found!=='undefined' && newanimal.pubtime!=='undefined' && newanimal.animalcont!=='undefined' && newanimal.animalplace!=='undefined' && newanimal.animaltime!=='undefined' && newanimal.title!=='undefined' && newanimal.lostcity!=='undefined' && newanimal.lianxi!=='undefined' && newanimal.classify!=='undefined'){
-        newanimal.save({username:newanimal.username,animalpic:newanimal.animalpic,pubtime:newanimal.pubtime,found:newanimal.found,animalcont:newanimal.animalcont,animalplace:newanimal.animalplace,animaltime:newanimal.animaltime,title:newanimal.title,lostcity:newanimal.lostcity,lianxi:newanimal.lianxi,classify:newanimal.classify},function(err,results){          
-            if(err){
-              res.locals.error = err;
-              return;
-            }
+    // if(newanimal.animalpic!=='undefined' && newanimal.found!=='undefined' && newanimal.pubtime!=='undefined' && newanimal.animalcont!=='undefined' && newanimal.animalplace!=='undefined' && newanimal.animaltime!=='undefined' && newanimal.title!=='undefined' && newanimal.lostcity!=='undefined' && newanimal.lianxi!=='undefined' && newanimal.classify!=='undefined'){
+        newanimal.save(newanimal.title,newanimal,function(err,results){          
+            res.send(results);
         });
          //返回响应数据
-         res.send('1');
-         console.log('发布成功');
-    }
-    else{
-        res.send('2');
-    }
+    //      res.send('1');
+    //      console.log('发布成功');
+    // }
+    // else{
+    //     res.send('2');
+    // }
     // newPublish.deleteData(newPublish.date,function(err,results){
     //     if(err){
     //       return;

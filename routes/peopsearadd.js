@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var dbConfig = require('../db/db');
-var lostR = require('../db/peopsear-recruit');
+var lostpeopR = require('../db/peopsear-recruit');
 
 router.post('/',function(req,res){
     res.header("Access-Control-Allow-Origin", "*");
@@ -11,53 +11,54 @@ router.post('/',function(req,res){
     res.header('Access-Control-Allow-Headers', 'Content-Type');
 
     var username=req.body.username;
-    var peoplepic = req.body.peoplepic;
-    var pubtime = req.body.pubtime;
-    var found = req.body.found;
+    // var peoplepic = req.body.peoplepic;
+    var peoppubtime = req.body.peoppubtime;
+    var peopfound = req.body.peopfound;
     var peopcont = req.body.peopcont;
     var peoplesearplace = req.body.peoplesearplace;
-    var losttime = req.body.losttime;
-    var title = req.body.title;
-    var lostcity = req.body.lostcity;
-    var lianxi = req.body.lianxi;
+    var peoplosttime = req.body.peoplosttime;
+    var peoptitle = req.body.peoptitle;
+    var peoplostcity = req.body.peoplostcity;
+    var peoplianxi = req.body.peoplianxi;
 
     console.log('username:'+username);
-    console.log('peoplepic:'+peoplepic);
-    console.log('found:'+found);
-    console.log('pubtime:'+pubtime);
+    // console.log('peoplepic:'+peoplepic);
+    console.log('peopfound:'+peopfound);
+    console.log('peoppubtime:'+peoppubtime);
     console.log('peopcont:'+peopcont);
     console.log('peoplesearplace:'+peoplesearplace);
-    console.log('losttime:'+losttime);
-    console.log('title:'+title);
-    console.log('lostcity:'+lostcity);
-    console.log('lianxi:'+lianxi);
+    console.log('peoplosttime:'+peoplosttime);
+    console.log('peoptitle:'+peoptitle);
+    console.log('peoplostcity:'+peoplostcity);
+    console.log('peoplianxi:'+peoplianxi);
 
-    var newpeoplost = new lostR({
+    var newpeoplost = new lostpeopR({
         username:username,
-        peoplepic:peoplepic,
-        pubtime:pubtime,
-        found:found,
+        // peoplepic:peoplepic,
+        peoppubtime:peoppubtime,
+        peopfound:peopfound,
         peopcont:peopcont,
         peoplesearplace:peoplesearplace,
-        losttime:losttime,
-        title:title,
-        lostcity:lostcity,
-        lianxi:lianxi
+        peoplosttime:peoplosttime,
+        peoptitle:peoptitle,
+        peoplostcity:peoplostcity,
+        peoplianxi:peoplianxi
     });
-    if(newpeoplost.peoplepic!=='undefined' && newpeoplost.found!=='undefined' && newpeoplost.pubtime!=='undefined' && newpeoplost.peopcont!=='undefined' && newpeoplost.peoplesearplace!=='undefined' && newpeoplost.losttime!=='undefined' && newpeoplost.title!=='undefined' && newpeoplost.lostcity!=='undefined' && newpeoplost.lianxi!=='undefined'){
-        newpeoplost.save({username:newpeoplost.username,peoplepic:newpeoplost.peoplepic,pubtime:newpeoplost.pubtime,found:newpeoplost.found,peopcont:newpeoplost.peopcont,peoplesearplace:newpeoplost.peoplesearplace,losttime:newpeoplost.losttime,title:newpeoplost.title,lostcity:newpeoplost.lostcity,lianxi:newpeoplost.lianxi},function(err,results){          
-            if(err){
-              res.locals.error = err;
-              return;
-            }
-        });
+    // if(newpeoplost.username!=='undefined' && newpeoplost.peopfound!=='undefined' && newpeoplost.peoppubtime!=='undefined' && newpeoplost.peopcont!=='undefined' && newpeoplost.peoplesearplace!=='undefined' && newpeoplost.peoplosttime!=='undefined' && newpeoplost.peoptitle!=='undefined' && newpeoplost.peoplostcity!=='undefined' && newpeoplost.peoplianxi!=='undefined'){
+    newpeoplost.updatepeo(newpeoplost.peoptitle,newpeoplost,function(err,results){          
+        // if(err){
+        //   res.locals.error = err;
+        //   return;
+        // }
+        res.send(results);
+    });
          //返回响应数据
-         res.send('1');
-         console.log('发布成功');
-    }
-    else{
-        res.send('2');
-    }
+    //      res.send('1');
+    //      console.log('发布成功');
+    // }
+    // else{
+    //     res.send('2');
+    // }
     // newPublish.deleteData(newPublish.date,function(err,results){
     //     if(err){
     //       return;

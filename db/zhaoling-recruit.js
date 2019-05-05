@@ -24,16 +24,16 @@ module.exports =zhaolingR;
 
 pool.getConnection(function(err, connection) {
     //保存数据
-    zhaolingR.prototype.save = function save(admin,callback) {
-        pool.getConnection(function (err, connection) {
-            var insertzhaoling_Sql = "INSERT INTO zhaoling(username,zhaolingpic,pubtime,found,zhaolingcont,zhaolingplace,zhaolingtime,title,classify,lostcity,lianxi) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-            connection.query(insertzhaoling_Sql, [admin.username,admin.zhaolingpic,admin.pubtime,admin.found,admin.zhaolingcont,admin.zhaolingplace,admin.zhaolingtime,admin.title,admin.classify,admin.lostcity,admin.lianxi], function (err, result) {
-                connection.release();
-                if (err) {
-                    console.log("insertzhaoling_Sql Error: " + err.message);
+    zhaolingR.prototype.save = function save(title,data,callback){
+        pool.getConnection(function(err,connection){
+            var saveZhaolingSql = "UPDATE zhaoling SET username =?,pubtime =?,found =?,zhaolingcont =?,zhaolingplace =?,zhaolingtime =?,lostcity =?,lianxi =?,classify =? WHERE title =?";
+            connection.query(saveZhaolingSql,[data.username,data.pubtime,data.found,data.zhaolingcont,data.zhaolingplace,data.zhaolingtime,data.lostcity,data.lianxi,data.classify,title],function(err,result){
+                if(err){
+                    console.log('[UPDATE ERROR]-',err.message);
                     return;
                 }
-                callback(err, result);
+                console.log('UPDATE affectedRows',result.affectedRows);
+                callback(err,result);
             });
         });
     };

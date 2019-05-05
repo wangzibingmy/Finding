@@ -26,6 +26,11 @@ var zhaolingRouter = require('./routes/zhaoling');
 var zhaolingaddRouter = require('./routes/zhaolingadd');
 var myzhaolingRouter = require('./routes/myzhaoling');
 var repwdRouter = require('./routes/repwd');
+var upfoundRouter = require('./routes/upfound');
+var imgaddRouter = require('./routes/imgadd');
+var imgaddanimalRouter = require('./routes/imgaddanimal');
+var imgaddsthRouter = require('./routes/imgaddsth');
+var imgaddzhaolingRouter = require('./routes/imgaddzhaoling');
 
 var app = express();
 // app.all('*', function(req, res, next) {
@@ -68,6 +73,14 @@ app.use('/zhaoling',zhaolingRouter);
 app.use('/myzhaoling',myzhaolingRouter);
 app.use('/zhaolingadd',zhaolingaddRouter);
 app.use('/repwd',repwdRouter);
+app.use('/upfound',upfoundRouter);
+app.use('/imgadd',imgaddRouter);
+app.use('/imgaddanimal',imgaddanimalRouter);
+app.use('/imgaddsth',imgaddsthRouter);
+app.use('/imgaddzhaoling',imgaddzhaolingRouter);
+
+app.use(bodyParser.json({limit:'500kb'}));
+app.use(bodyParser.urlencoded({limit:'500kb',extended:true}));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

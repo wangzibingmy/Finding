@@ -24,16 +24,16 @@ module.exports =lostR;
 
 pool.getConnection(function(err, connection) {
     //保存数据
-    lostR.prototype.save = function save(admin,callback) {
-        pool.getConnection(function (err, connection) {
-            var insertlookforsth_Sql = "INSERT INTO look_for_sth(username,lookforpic,pubtime,found,sthcont,lookforplace,losttime,title,classify,lostcity,lianxi) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-            connection.query(insertlookforsth_Sql, [admin.username,admin.lookforpic,admin.pubtime,admin.found,admin.sthcont,admin.lookforplace,admin.losttime,admin.title,admin.classify,admin.lostcity,admin.lianxi], function (err, result) {
-                connection.release();
-                if (err) {
-                    console.log("insertlookforsth_Sql Error: " + err.message);
+    lostR.prototype.save = function save(title,data,callback){
+        pool.getConnection(function(err,connection){
+            var saveSthSql = "UPDATE look_for_sth SET username =?,pubtime =?,found =?,sthcont =?,lookforplace =?,losttime =?,lostcity =?,lianxi =?,classify=? WHERE title =?";
+            connection.query(saveSthSql,[data.username,data.pubtime,data.found,data.sthcont,data.lookforplace,data.losttime,data.lostcity,data.lianxi,data.classify,title],function(err,result){
+                if(err){
+                    console.log('[UPDATE ERROR]-',err.message);
                     return;
                 }
-                callback(err, result);
+                console.log('UPDATE affectedRows',result.affectedRows);
+                callback(err,result);
             });
         });
     };
